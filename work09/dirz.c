@@ -17,7 +17,7 @@ int main(){
   size = 0;
   char ans[256] = {0};
   printf("Tree: \n");
-  printf("%s\n",tree(".."));
+  tree("../..");
   printf("Total Directory Size: %s\n", convertbytes(size));
 
   if(!d){
@@ -83,25 +83,22 @@ char * convertbytes( long bytes ){
   return ans;
 }
 
-char * tree( char * dir ){
+void tree( char * dir ){
   DIR * d;
   struct dirent* entry;
   d = opendir(dir);
-  memset(ans, 0, 255);
-  char temp[32];
+  char temp[256];
   
   while (entry = readdir(d)) {
     if(!strcmp(entry->d_name,"..") || !strcmp(entry->d_name,"."))
       continue;
     if(entry->d_type == DT_REG){
-      //printf("--------%d---------",counter);
       tabbing(counter);
       printf("%s\n", entry->d_name);
       stat(entry->d_name,&tmp);
       size += tmp.st_size;
     }
     else if (entry->d_type == DT_DIR){
-      //printf("--------%d---------",counter);
       tabbing(counter);
       printf("%s/\n", entry->d_name);
       counter++;
@@ -111,7 +108,6 @@ char * tree( char * dir ){
   }
   closedir(d);
   counter--;
-  return ans;
 }
 
 char * tabbing( int i ){

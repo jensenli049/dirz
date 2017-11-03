@@ -18,5 +18,5 @@ long dirsize( char * );
 char * listdirz( char * );
 char * listfiles( char * );
 char * convertbytes( long );
-char * tree( char * );
+void tree( char * );
 char * tabbing( int );
