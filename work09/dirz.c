@@ -88,15 +88,13 @@ void tree( char * dir ){
   struct dirent* entry;
   d = opendir(dir);
   char temp[256];
-  
+  size += dirsize(dir);
   while (entry = readdir(d)) {
     if(!strcmp(entry->d_name,"..") || !strcmp(entry->d_name,"."))
       continue;
     if(entry->d_type == DT_REG){
       tabbing(counter);
       printf("%s\n", entry->d_name);
-      stat(entry->d_name,&tmp);
-      size += tmp.st_size;
     }
     else if (entry->d_type == DT_DIR){
       tabbing(counter);
