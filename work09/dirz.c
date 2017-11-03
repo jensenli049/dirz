@@ -7,17 +7,18 @@ int main(){
     
   //Directories:
   printf("Directories:\n");
-  printf("%s\n", listdirz("."));
+  printf("%s\n", listdirz(".."));
     
   //Regular Files:
   printf("Regular Files: \n");
-  printf("%s\n", listfiles("."));
+  printf("%s\n", listfiles(".."));
 
   //Tree:
   size = 0;
+  char ans[256] = {0};
   printf("Tree: \n");
   printf("%s\n",tree(".."));
-  printf("Total Directory Size: %ld\n", size);
+  printf("Total Directory Size: %s\n", convertbytes(size));
 
   if(!d){
     printf("%s\n", strerror(errno));
@@ -83,26 +84,37 @@ char * convertbytes( long bytes ){
 }
 
 char * tree( char * dir ){
+  DIR * d;
   struct dirent* entry;
   d = opendir(dir);
   memset(ans, 0, 255);
   char temp[32];
-
+  
   while (entry = readdir(d)) {
-    //printf("\n%s\n",entry->d_name);
-    if(!strcmp(entry->d_name,"..") || !strcmp(entry->d_name,".")){
-      printf("%s\n",entry->d_name);
+    if(!strcmp(entry->d_name,"..") || !strcmp(entry->d_name,"."))
       continue;
+    if(entry->d_type == DT_REG){
+      //printf("--------%d---------",counter);
+      tabbing(counter);
+      printf("%s\n", entry->d_name);
+      stat(entry->d_name,&tmp);
+      size += tmp.st_size;
     }
     else if (entry->d_type == DT_DIR){
-      printf("%s\n", entry->d_name);
+      //printf("--------%d---------",counter);
+      tabbing(counter);
+      printf("%s/\n", entry->d_name);
+      counter++;
       sprintf(temp, "%s/%s", dir, entry->d_name);
-      //printf("\n%s\n",temp);
-      sprintf(ans,"%s\t%s\n", ans, tree(temp));
+      tree(temp);
     }
-    else if (entry->d_type == DT_REG)
-      sprintf(ans,"%s\t%s\n", ans, entry->d_name);
   }
   closedir(d);
+  counter--;
   return ans;
+}
+
+char * tabbing( int i ){
+  while(i--)
+    printf("\t");
 }

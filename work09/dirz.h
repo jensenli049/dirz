@@ -12,9 +12,11 @@ DIR *d;
 struct stat tmp;
 char ans[256] = {0};
 long size = 0;
+int counter = 0;
 
 long dirsize( char * );
 char * listdirz( char * );
 char * listfiles( char * );
 char * convertbytes( long );
 char * tree( char * );
+char * tabbing( int );
